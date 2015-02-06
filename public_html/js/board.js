@@ -1,5 +1,8 @@
 function GameBoard() {
 
+    this.rows = 7;
+    this.columns = 7;
+
     this.tile_size = 1;
 
     this.black = new Color(0, 0, 0);
@@ -11,14 +14,15 @@ function GameBoard() {
 
     var tile_color = this.red_tile;
 
-    for (var x = 0; x <= 7; x++) {
+    // Initialize gameboard with tiles (rows * columns)
+    for (var x = 0; x <= this.rows; x++) {
 
         if (x % 2 === 0)
             tile_color = this.black;
         else
             tile_color = this.red_tile;
 
-        for (var y = 0; y <= 7; y++) {
+        for (var y = 0; y <= this.columns; y++) {
 
             var tile = new Tile(x, y, tile_color);
             this.tiles.push(tile);
@@ -51,6 +55,7 @@ GameBoard.prototype.highlight = function (x, y) {
 
 GameBoard.prototype.possibleMoves = function (piece) {
 
+    // Determines direction (does the piece move up or down)
     var dy = piece.color === Colour.BLACK ? 1 : -1;
 
     var moves = [];
@@ -146,11 +151,11 @@ GameBoard.prototype.isInsideBoard = function (coordinates) {
     var x = coordinates.x;
     var y = coordinates.y;
 
-    if (x < 0 || x > 7) {
+    if (x < 0 || x > this.rows) {
         return false;
     }
 
-    if (y < 0 || y > 7) {
+    if (y < 0 || y > this.columns) {
         return false;
     }
 
