@@ -13,7 +13,7 @@ function Scalable (x, y) {
     this.originX = (this.pointX + ((x - y) * 60)) * scale;
     this.originY = (this.pointY - (x * 35) - (y * 35)) * scale;
 
-    // Kulmakerroin
+    // Slope
     this.slope = 35 / 60;
 
     this.width = 120 * scale;

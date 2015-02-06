@@ -4,7 +4,7 @@ window.requestAnimFrame = (function(){
         window.mozRequestAnimationFrame ||
         window.oRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
-        function(/* kutsuttava funktio */ callback, /* elementti */ element){
+        function(callback, element){
         window.setTimeout(callback, 1000 / 1);
     };
 })();
@@ -53,7 +53,7 @@ var Game = (function () {
         my = e.pageY - offsetY;
 
         // We return a simple javascript object (a hash) with x and y defined
-        return {x: mx, y: my};
+        return { x: mx, y: my };
     }
 
     function initPieces () {

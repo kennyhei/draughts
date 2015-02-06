@@ -5,10 +5,7 @@ function Piece (x, y, color) {
     Scalable.call(this, x, y);
 
     this.piece_size = 0.4;
-
-    // Piece colour
     this.color = color;
-
     this.promoted = false;
 }
 

@@ -47,7 +47,6 @@ GameBoard.prototype.highlight = function (x, y) {
         Point((x + 1), (y + 1), -0.5),
         Point((x + 1), y, -0.5)
     ]), new Color(100, 250, 60));
-
 }
 
 GameBoard.prototype.possibleMoves = function (piece) {
@@ -97,7 +96,6 @@ GameBoard.prototype.possibleMoves = function (piece) {
         if (this.validMovement(piece, bRight, 1, dy)) {
             moves.push(bRight);
         }
-
     }
 
     return moves;
@@ -168,9 +166,7 @@ GameBoard.prototype.removePieceAt = function (x, y) {
         if (piece.x === x && piece.y === y) {
             this.pieces.splice(i, 1);
         }
-
     }
-
 }
 
 GameBoard.prototype.recalculate = function () {
