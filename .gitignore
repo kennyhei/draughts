@@ -1,5 +1,6 @@
 # Project
 
-nbproject/private/
 config/
+nbproject/private/
+node_modules/
 test/

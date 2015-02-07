@@ -9,6 +9,9 @@ window.requestAnimFrame = (function(){
     };
 })();
 
+// Going global
+var socket = io();
+
 var Shape = Isomer.Shape;
 var Point = Isomer.Point;
 var Path = Isomer.Path;
@@ -22,8 +25,10 @@ var canvas = document.getElementById("art");
 var context = document.getElementById("art").getContext("2d");
 
 var Colour = {
+
     WHITE: new Color(190, 190, 190),
     BLACK: new Color(50, 50, 50)
+
 }
 
 // For scaling canvas
@@ -37,6 +42,8 @@ var Game = (function () {
 
     var gameboard;
     var moves = null;
+
+    var playerTurn = false;
 
     function getMouse (e) {
         var element = canvas, offsetX = 0, offsetY = 0, mx, my;
@@ -86,6 +93,28 @@ var Game = (function () {
         offset === 0 ? offset = 1 : offset = 0;
     }
 
+    function initSocketEvents () {
+
+        socket.on('turn', function (data) {
+
+            var piece = gameboard.getPiece(data.pieceX, data.pieceY);
+            var moveTo = data.movement;
+
+            performMove(piece, moveTo);
+
+            gameUpdate = true;
+            playerTurn = true;
+        });
+
+        socket.on('status', function (data) {
+
+            // First player starts the game
+            if (data.queue === 1) {
+                playerTurn = true;
+            }
+        })
+    }
+
     function clickedPiece (mx, my) {
 
         for (var i = 0; i < gameboard.pieces.length; ++i) {
@@ -101,40 +130,56 @@ var Game = (function () {
         }
     }
 
+    function performMove (selected, moveTo) {
+
+        selected.move(moveTo.x, moveTo.y);
+
+        if (selected.isNextToBorder() && !selected.isPromoted()) {
+            selected.promote();
+        }
+
+        // Munch
+        if (moveTo['remove'] !== undefined) {
+            var piece = moveTo['remove'];
+            gameboard.removePieceAt(piece.x, piece.y);
+        }
+    }
+
     function movedPiece (mx, my) {
 
         if (selected !== null && moves !== null) {
 
-            for (var x = 0; x < moves.length; ++x) {
+            for (var i = 0; i < moves.length; ++i) {
 
-                var moveTo = moves[x];
+                var moveTo = moves[i];
 
-                for (var j = 0; j < gameboard.tiles.length; ++j) {
+                if (selected.x === moveTo.x && selected.y === moveTo.y) {
+                    continue;
+                }
 
-                    if (selected.x === moveTo.x && selected.y === moveTo.y) {
-                        continue;
-                    }
+                var tile = gameboard.getTile(moveTo.x, moveTo.y);
 
-                    var tile = gameboard.tiles[j];
+                // Move selected piece here if this was the tile user clicked
+                if (tile.contains(mx, my)) {
 
-                    if (moveTo.x === tile.x && moveTo.y === tile.y && tile.contains(mx, my)) {
+                    var data = {
 
-                        selected.move(moveTo.x, moveTo.y);
+                        pieceX: selected.x,
+                        pieceY: selected.y,
+                        movement: moveTo
 
-                        if (selected.isNextToBorder() && !selected.isPromoted()) {
-                            selected.promote();
-                        }
+                    };
 
-                        // Munch
-                        if (moveTo["remove"] !== undefined) {
-                            var piece = moveTo["remove"];
-                            gameboard.removePieceAt(piece.x, piece.y);
-                        }
+                    performMove(selected, moveTo);
 
-                        selected = null;
-                        moves = null;
-                        return;
-                    }
+                    // Send movement data to opponent
+                    socket.emit('turn', data);
+
+                    selected = null;
+                    moves = null;
+                    playerTurn = false;
+
+                    return;
                 }
             }
         }
@@ -142,9 +187,11 @@ var Game = (function () {
 
     function init() {
 
+        // Initialize gameboard with pieces
         gameboard = new GameBoard();
         initPieces();
 
+        // Scale game
         $(window).resize(function () {
 
             var currentWidth = $("canvas").width();
@@ -153,7 +200,13 @@ var Game = (function () {
             gameboard.recalculate();
         });
 
+        // Listen for mouse clicks
         canvas.addEventListener('mousedown', function (e) {
+
+            // Not your turn
+            if (playerTurn === false) {
+                return;
+            }
 
             var mouse = getMouse(e);
             var mx = mouse.x;
@@ -165,6 +218,9 @@ var Game = (function () {
             // Check if user wants to move a selected piece
             movedPiece(mx, my);
         });
+
+        // Socket events
+        initSocketEvents();
     }
 
     function logic () {

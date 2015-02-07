@@ -179,6 +179,30 @@ GameBoard.prototype.removePieceAt = function (x, y) {
     }
 }
 
+GameBoard.prototype.getPiece = function (x, y) {
+
+    for (var i = 0; i < this.pieces.length; ++i) {
+
+        var piece = this.pieces[i];
+
+        if (piece.x === x && piece.y === y) {
+            return piece;
+        }
+    }
+}
+
+GameBoard.prototype.getTile = function (x, y) {
+
+    for (var i = 0; i < this.tiles.length; ++i) {
+
+        var tile = this.tiles[i];
+
+        if (tile.x === x && tile.y === y) {
+            return tile;
+        }
+    }
+}
+
 GameBoard.prototype.recalculate = function () {
 
     for (var i = 0; i < this.pieces.length; ++i) {
