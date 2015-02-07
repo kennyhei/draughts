@@ -116,7 +116,12 @@ GameBoard.prototype.validMovement = function (piece, coordinates, dx, dy) {
             return true;
         } else if (piece.color !== neighbour.color) {
 
-            coordinates["remove"] = neighbour;
+            // Trying to jump over two pieces, not possible
+            if (coordinates['remove'] !== undefined) {
+                return false;
+            }
+
+            coordinates['remove'] = neighbour;
 
             coordinates.x += dx;
             coordinates.y += dy;
