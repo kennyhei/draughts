@@ -105,15 +105,15 @@ var Game = (function () {
             performMove(piece, moveTo);
 
             gameUpdate = true;
-            playerTurn = true;
+            playerTurn = data.playerTurn;
         });
 
         socket.on('highlight', function (data) {
 
-            // Highlight opponent's piece
+            // Highlight or remove highlight from opponent's piece
             var piece = gameboard.getPiece(data.pieceX, data.pieceY);
+            piece.highlight(data.highlight);
 
-            piece.highlight(true);
             gameUpdate = true;
         });
 
@@ -137,13 +137,19 @@ var Game = (function () {
 
             if (piece.contains(mx, my) && piece.color === playerColour) {
 
+                // Remove highlight from old selection
+                if (selected !== null) {
+                    selected.highlight(false);
+                    socket.emit('highlight', { pieceX: selected.x, pieceY: selected.y, highlight: false });
+                }
+
                 selected = piece;
                 gameUpdate = true;
 
                 selected.highlight(true);
 
                 // Highlight piece to opponent
-                socket.emit('highlight', { pieceX: piece.x, pieceY: piece.y });
+                socket.emit('highlight', { pieceX: piece.x, pieceY: piece.y, highlight: true });
 
                 return;
             }
@@ -187,7 +193,8 @@ var Game = (function () {
 
                         pieceX: selected.x,
                         pieceY: selected.y,
-                        movement: moveTo
+                        movement: moveTo,
+                        playerTurn: moveTo['remove'] === undefined
 
                     };
 
@@ -198,7 +205,7 @@ var Game = (function () {
 
                     selected = null;
                     moves = null;
-                    playerTurn = false;
+                    playerTurn = !data.playerTurn;
 
                     return;
                 }
