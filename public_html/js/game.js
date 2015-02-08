@@ -94,7 +94,7 @@ var Game = (function () {
         offset === 0 ? offset = 1 : offset = 0;
     }
 
-    function initSocketEvents () {
+    function socketEvents () {
 
         socket.on('turn', function (data) {
 
@@ -115,6 +115,11 @@ var Game = (function () {
             piece.highlight(data.highlight);
 
             gameUpdate = true;
+        });
+
+        socket.on('players', function (data) {
+
+            $('span#counter').text(data.clients);
         });
 
         socket.on('status', function (data) {
@@ -248,7 +253,7 @@ var Game = (function () {
         });
 
         // Socket events
-        initSocketEvents();
+        socketEvents();
     }
 
     function logic () {

@@ -6,7 +6,7 @@ var io = require('socket.io')(http);
 
 app.use(express.static(__dirname));
 
-var connectionCounter = 0;
+var playerCount = 0;
 
 app.get('/', function (request, response) {
 
@@ -15,10 +15,13 @@ app.get('/', function (request, response) {
 
 io.on('connection', function (socket) {
 
-    ++connectionCounter;
+    ++playerCount;
+
+    // Send info to everyone about number of connected players
+    io.emit('players', { clients: playerCount });
 
     // Send status info to new client
-    socket.emit('status', { players: connectionCounter });
+    socket.emit('status', { players: playerCount });
 
     socket.on('turn', function (data) {
 
@@ -34,7 +37,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
 
-        --connectionCounter;
+        io.emit('players', { clients: --playerCount });
     });
 
 });
