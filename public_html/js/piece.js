@@ -6,10 +6,21 @@ function Piece (x, y, color) {
 
     this.piece_size = 0.4;
     this.color = color;
+
     this.promoted = false;
+    this.highlighted = false;
 }
 
 Piece.prototype.draw = function () {
+
+    if (this.highlighted) {
+        iso.add(new Path([
+            Point(this.x, this.y, -0.5),
+            Point(this.x, (this.y + 1), -0.5),
+            Point((this.x + 1), (this.y + 1), -0.5),
+            Point((this.x + 1), this.y, -0.5)
+        ]), new Color(100, 250, 60));
+    }
 
     iso.add(Cylinder(new Point(this.x, this.y, 0), this.piece_size, 25, .2), this.color);
 
@@ -27,15 +38,14 @@ Piece.prototype.move = function (dx, dy) {
     this.originY = (this.pointY - (this.x * 35) - (this.y * 35)) * scale;
 }
 
-Piece.prototype.highlight = function() {
+Piece.prototype.highlight = function (highlight) {
 
-    // Highlight selected piece
-    iso.add(new Path([
-        Point(this.x, this.y, -0.5),
-        Point(this.x, (this.y + 1), -0.5),
-        Point((this.x + 1), (this.y + 1), -0.5),
-        Point((this.x + 1), this.y, -0.5)
-    ]), new Color(100, 250, 60));
+    this.highlighted = highlight;
+}
+
+Piece.prototype.highlighted = function () {
+
+    return this.highlighted;
 }
 
 Piece.prototype.isNextToBorder = function () {
@@ -48,6 +58,7 @@ Piece.prototype.isNextToBorder = function () {
 }
 
 Piece.prototype.isPromoted = function () {
+
     return this.promoted;
 }
 

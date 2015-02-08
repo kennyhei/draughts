@@ -26,6 +26,12 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('turn', data);
     });
 
+    socket.on('highlight', function (data) {
+
+        // Forward data to another player
+        socket.broadcast.emit('highlight', data);
+    });
+
     socket.on('disconnect', function () {
 
         --connectionCounter;

@@ -98,6 +98,7 @@ var Game = (function () {
 
         socket.on('turn', function (data) {
 
+            // Perform opponent's move
             var piece = gameboard.getPiece(data.pieceX, data.pieceY);
             var moveTo = data.movement;
 
@@ -105,6 +106,15 @@ var Game = (function () {
 
             gameUpdate = true;
             playerTurn = true;
+        });
+
+        socket.on('highlight', function (data) {
+
+            // Highlight opponent's piece
+            var piece = gameboard.getPiece(data.pieceX, data.pieceY);
+
+            piece.highlight(true);
+            gameUpdate = true;
         });
 
         socket.on('status', function (data) {
@@ -129,6 +139,12 @@ var Game = (function () {
 
                 selected = piece;
                 gameUpdate = true;
+
+                selected.highlight(true);
+
+                // Highlight piece to opponent
+                socket.emit('highlight', { pieceX: piece.x, pieceY: piece.y });
+
                 return;
             }
         }
@@ -137,6 +153,7 @@ var Game = (function () {
     function performMove (selected, moveTo) {
 
         selected.move(moveTo.x, moveTo.y);
+        selected.highlight(false);
 
         if (selected.isNextToBorder() && !selected.isPromoted()) {
             selected.promote();
@@ -264,8 +281,6 @@ var Game = (function () {
                 var piece = gameboard.pieces[i];
 
                 if (selected === piece) {
-
-                    piece.highlight();
                     renderPossibleMoves();
                 }
 
