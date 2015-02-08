@@ -16,7 +16,8 @@ io.on('connection', function (socket) {
 
     ++connectionCounter;
 
-    io.emit('status', { queue: connectionCounter });
+    // Send status info to new client
+    socket.emit('status', { players: connectionCounter });
 
     socket.on('turn', function (data) {
 

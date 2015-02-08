@@ -44,6 +44,7 @@ var Game = (function () {
     var moves = null;
 
     var playerTurn = false;
+    var playerColour;
 
     function getMouse (e) {
         var element = canvas, offsetX = 0, offsetY = 0, mx, my;
@@ -109,8 +110,11 @@ var Game = (function () {
         socket.on('status', function (data) {
 
             // First player starts the game
-            if (data.queue === 1) {
+            if (data.players === 1) {
                 playerTurn = true;
+                playerColour = Colour.WHITE;
+            } else {
+                playerColour = Colour.BLACK;
             }
         })
     }
@@ -121,7 +125,7 @@ var Game = (function () {
 
             var piece = gameboard.pieces[i];
 
-            if (piece.contains(mx, my)) {
+            if (piece.contains(mx, my) && piece.color === playerColour) {
 
                 selected = piece;
                 gameUpdate = true;
