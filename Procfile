@@ -1,1 +1,1 @@
-web: node public_html/index.js
+web: node public_html/server.js
