@@ -10,7 +10,7 @@ window.requestAnimFrame = (function(){
 })();
 
 // Going global
-var socket = io();
+var socket = io.connect();
 
 var Shape = Isomer.Shape;
 var Point = Isomer.Point;

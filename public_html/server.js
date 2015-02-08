@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+var port = process.env.PORT || 3000;
 var io = require('socket.io')(http);
 
 app.use(express.static(__dirname));
@@ -32,7 +33,7 @@ io.on('connection', function (socket) {
 
 });
 
-http.listen(3000, function () {
+http.listen(port, function () {
 
-    console.log('Listening on *:3000');
+    console.log('Listening on *:' + port);
 });
