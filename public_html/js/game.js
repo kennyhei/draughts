@@ -19,7 +19,6 @@ var Color = Isomer.Color;
 var Cylinder = Shape.Cylinder;
 
 var iso = new Isomer(document.getElementById("art"));
-var listener = new window.keypress.Listener();
 
 var canvas = document.getElementById("art");
 var context = document.getElementById("art").getContext("2d");
