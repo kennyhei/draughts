@@ -220,7 +220,7 @@ var Game = (function () {
     function init() {
 
         // Initialize gameboard with pieces
-        gameboard = new GameBoard();
+        gameboard = new Gameboard();
         initPieces();
 
         // Scale game

@@ -1,4 +1,4 @@
-function GameBoard() {
+function Gameboard() {
 
     this.rows = 7;
     this.columns = 7;
@@ -35,7 +35,7 @@ function GameBoard() {
     }
 }
 
-GameBoard.prototype.draw = function () {
+Gameboard.prototype.draw = function () {
 
     for (var i = 0; i < this.tiles.length; ++i) {
         this.tiles[i].draw();
@@ -43,7 +43,7 @@ GameBoard.prototype.draw = function () {
 }
 
 // Highlight a tile
-GameBoard.prototype.highlight = function (x, y) {
+Gameboard.prototype.highlight = function (x, y) {
 
     iso.add(new Path([
         Point(x, y, -0.5),
@@ -53,7 +53,7 @@ GameBoard.prototype.highlight = function (x, y) {
     ]), new Color(100, 250, 60));
 }
 
-GameBoard.prototype.possibleMoves = function (piece) {
+Gameboard.prototype.possibleMoves = function (piece) {
 
     // Determines direction (does the piece move up or down)
     var dy = piece.color === Colour.BLACK ? 1 : -1;
@@ -106,7 +106,7 @@ GameBoard.prototype.possibleMoves = function (piece) {
     return moves;
 }
 
-GameBoard.prototype.validMovement = function (piece, coordinates, dx, dy) {
+Gameboard.prototype.validMovement = function (piece, coordinates, dx, dy) {
 
     if (this.isInsideBoard(coordinates)) {
 
@@ -137,7 +137,7 @@ GameBoard.prototype.validMovement = function (piece, coordinates, dx, dy) {
     return false;
 }
 
-GameBoard.prototype.pieceAt = function (x, y) {
+Gameboard.prototype.pieceAt = function (x, y) {
 
     for (var i = 0; i < this.pieces.length; ++i) {
 
@@ -151,7 +151,7 @@ GameBoard.prototype.pieceAt = function (x, y) {
     return null;
 }
 
-GameBoard.prototype.isInsideBoard = function (coordinates) {
+Gameboard.prototype.isInsideBoard = function (coordinates) {
 
     var x = coordinates.x;
     var y = coordinates.y;
@@ -167,7 +167,7 @@ GameBoard.prototype.isInsideBoard = function (coordinates) {
     return true;
 }
 
-GameBoard.prototype.removePieceAt = function (x, y) {
+Gameboard.prototype.removePieceAt = function (x, y) {
 
     for (var i = 0; i < this.pieces.length; ++i) {
 
@@ -179,7 +179,7 @@ GameBoard.prototype.removePieceAt = function (x, y) {
     }
 }
 
-GameBoard.prototype.getPiece = function (x, y) {
+Gameboard.prototype.getPiece = function (x, y) {
 
     for (var i = 0; i < this.pieces.length; ++i) {
 
@@ -191,7 +191,7 @@ GameBoard.prototype.getPiece = function (x, y) {
     }
 }
 
-GameBoard.prototype.getTile = function (x, y) {
+Gameboard.prototype.getTile = function (x, y) {
 
     for (var i = 0; i < this.tiles.length; ++i) {
 
@@ -203,7 +203,7 @@ GameBoard.prototype.getTile = function (x, y) {
     }
 }
 
-GameBoard.prototype.recalculate = function () {
+Gameboard.prototype.recalculate = function () {
 
     for (var i = 0; i < this.pieces.length; ++i) {
         this.pieces[i].recalculate();
