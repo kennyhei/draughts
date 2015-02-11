@@ -116,9 +116,9 @@ var Game = (function () {
             gameUpdate = true;
         });
 
-        socket.on('players', function (data) {
+        socket.on('playerCount', function (data) {
 
-            $('span#counter').text(data.clients);
+            $('span#counter').text(data.count);
         });
 
         socket.on('status', function (data) {

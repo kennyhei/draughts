@@ -17,8 +17,13 @@ io.on('connection', function (socket) {
 
     ++playerCount;
 
+    // Only two players allowed
+    if (playerCount > 2) {
+        socket.disconnect(true);
+    }
+
     // Send info to everyone about number of connected players
-    io.emit('players', { clients: playerCount });
+    io.emit('playerCount', { count: playerCount });
 
     // Send status info to new client
     socket.emit('status', { players: playerCount });
