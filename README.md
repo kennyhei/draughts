@@ -1,2 +1,4 @@
 # draughts
-Classic board game with isometric style thanks to [Isomer](http://jdan.github.io/isomer/) graphics library. Made with HTML + CSS + JavaScript combo. Planning to transform this to an online game with Socket.io sometime in the future...
+Classic board game with isometric style thanks to [Isomer](http://jdan.github.io/isomer/) graphics library. Made with HTML + CSS + JavaScript combo.
+
+You can try the (incomplete) online version here which was done with Socket.io: https://shrouded-escarpment-7226.herokuapp.com/
